@@ -58,8 +58,8 @@ const PDFAITutor: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const [apiKey, setApiKey] = useState<string>('');
-    const [showApiInput, setShowApiInput] = useState<boolean>(true);
+    // const [apiKey, setApiKey] = useState<string>('');
+    // const [showApiInput, setShowApiInput] = useState<boolean>(true);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const pdfDocRef = useRef<PDFDocumentProxy | null>(null);
@@ -165,7 +165,10 @@ const PDFAITutor: React.FC = () => {
     };
 
     const sendMessage = async (): Promise<void> => {
-        if (!input.trim() || !pdfText || !apiKey) return;
+        // if (!input.trim() || !pdfText || !apiKey) return;
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+        if (!apiKey) throw new Error("Gemini API key is missing");
 
         const userMessage: Message = { role: 'user', content: input };
         setMessages(prev => [...prev, userMessage]);
@@ -214,11 +217,11 @@ Provide a clear, educational answer based on the PDF content. If relevant, menti
         setLoading(false);
     };
 
-    const saveApiKey = (): void => {
-        if (apiKey.trim()) {
-            setShowApiInput(false);
-        }
-    };
+    // const saveApiKey = (): void => {
+    //     if (apiKey.trim()) {
+    //         setShowApiInput(false);
+    //     }
+    // };
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
         if (e.key === 'Enter' && !loading) {
@@ -226,51 +229,51 @@ Provide a clear, educational answer based on the PDF content. If relevant, menti
         }
     };
 
-    const handleApiKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === 'Enter') {
-            saveApiKey();
-        }
-    };
+    // const handleApiKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    //     if (e.key === 'Enter') {
+    //         saveApiKey();
+    //     }
+    // };
 
     return (
         <div className="flex h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
             {/* API Key Modal */}
-            {showApiInput && (
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-slate-800 p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4 border border-blue-500/20">
-                        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                            <BookOpen className="w-6 h-6 text-blue-400" />
-                            Setup Required
-                        </h2>
-                        <p className="text-slate-300 mb-6">
-                            Get your free Gemini API key from{' '}
-                            <a
-                                href="https://aistudio.google.com/app/apikey"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-400 hover:text-blue-300 underline"
-                            >
-                                Google AI Studio
-                            </a>
-                        </p>
-                        <input
-                            type="password"
-                            value={apiKey}
-                            onChange={(e) => setApiKey(e.target.value)}
-                            placeholder="Paste your API key here"
-                            className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-                            onKeyPress={handleApiKeyPress}
-                        />
-                        <button
-                            onClick={saveApiKey}
-                            disabled={!apiKey.trim()}
-                            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                        >
-                            Continue
-                        </button>
-                    </div>
-                </div>
-            )}
+            {/*{showApiInput && (*/}
+            {/*    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">*/}
+            {/*        <div className="bg-slate-800 p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4 border border-blue-500/20">*/}
+            {/*            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">*/}
+            {/*                <BookOpen className="w-6 h-6 text-blue-400" />*/}
+            {/*                Setup Required*/}
+            {/*            </h2>*/}
+            {/*            <p className="text-slate-300 mb-6">*/}
+            {/*                Get your free Gemini API key from{' '}*/}
+            {/*                <a*/}
+            {/*                    href="https://aistudio.google.com/app/apikey"*/}
+            {/*                    target="_blank"*/}
+            {/*                    rel="noopener noreferrer"*/}
+            {/*                    className="text-blue-400 hover:text-blue-300 underline"*/}
+            {/*                >*/}
+            {/*                    Google AI Studio*/}
+            {/*                </a>*/}
+            {/*            </p>*/}
+            {/*            <input*/}
+            {/*                type="password"*/}
+            {/*                value={apiKey}*/}
+            {/*                onChange={(e) => setApiKey(e.target.value)}*/}
+            {/*                placeholder="Paste your API key here"*/}
+            {/*                className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"*/}
+            {/*                onKeyPress={handleApiKeyPress}*/}
+            {/*            />*/}
+            {/*            <button*/}
+            {/*                onClick={saveApiKey}*/}
+            {/*                disabled={!apiKey.trim()}*/}
+            {/*                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"*/}
+            {/*            >*/}
+            {/*                Continue*/}
+            {/*            </button>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*)}*/}
 
             {/* PDF Viewer */}
             <div className="flex-1 flex flex-col bg-slate-800 border-r border-slate-700">
